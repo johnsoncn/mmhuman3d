@@ -848,6 +848,7 @@ def render_smpl(
 
     # write .ply or .obj files
     if mesh_file_path is not None:
+        print('save mesh !!!!!!!!!!!!!!!!!!!!')
         mmcv.mkdir_or_exist(mesh_file_path)
 
         for person_idx in range(meshes.shape[1]):
@@ -1088,6 +1089,7 @@ def visualize_smpl_hmr(cam_transl,
                        det_width=224,
                        det_height=224,
                        bbox_format='xyxy',
+                       mesh_file_path=None,
                        **kwargs) -> None:
     """Simplest way to visualize HMR or SPIN or Smplify pred smpl with origin
     frames and predicted cameras."""
@@ -1107,6 +1109,7 @@ def visualize_smpl_hmr(cam_transl,
         K=None,
         R=None,
         orig_cam=None,
+        mesh_file_path=mesh_file_path
     )
     if isinstance(cam_transl, np.ndarray):
         cam_transl = torch.Tensor(cam_transl)

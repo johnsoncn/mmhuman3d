@@ -53,6 +53,8 @@ class DeciWatchPostProcessing:
     def __call__(self, x=None):
         # x.shape: [t,24,3]
         seq_len = x.shape[0]
+        print('seq_len', seq_len)
+        print('slide_window_size', self.slide_window_size)
         assert seq_len > self.slide_window_size
         assert x.shape[1:] == (24, 3, 3) or x.shape[1:] == (
             self.input_dimension) or x.shape[1:] == (24, 3)

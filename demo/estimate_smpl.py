@@ -4,11 +4,12 @@ import shutil
 import warnings
 from argparse import ArgumentParser
 from pathlib import Path
-
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import mmcv
 import numpy as np
 import torch
-
+print('mmhuman3d.apis')
 from mmhuman3d.apis import (
     feature_extract,
     inference_image_based_model,
@@ -142,6 +143,7 @@ def single_person_with_mmdet(args, frames_iter):
     frame_id_list, result_list = \
         get_detection_result(args, frames_iter, mesh_model, extractor)
 
+    print(frame_id_list, result_list)
     frame_num = len(frame_id_list)
     # speed up
     if args.speed_up_type:
@@ -152,6 +154,7 @@ def single_person_with_mmdet(args, frames_iter):
     for i, result in enumerate(mmcv.track_iter_progress(result_list)):
         frame_id = frame_id_list[i]
         if mesh_model.cfg.model.type == 'VideoBodyModelEstimator':
+            print('johnson VideoBodyModelEstimator')
             if args.speed_up_type:
                 warnings.warn(
                     'Video based models do not support speed up. '
@@ -164,6 +167,7 @@ def single_person_with_mmdet(args, frames_iter):
                 extracted_results=feature_results_seq,
                 with_track_id=False)
         elif mesh_model.cfg.model.type == 'ImageBodyModelEstimator':
+            print('johnson ImageBodyModelEstimator')
             if args.speed_up_type and i % speed_up_interval != 0\
                  and i <= speed_up_frames:
                 mesh_results = [{
@@ -181,6 +185,7 @@ def single_person_with_mmdet(args, frames_iter):
                     result,
                     bbox_thr=args.bbox_thr,
                     format='xyxy')
+            # print(mesh_results)
         else:
             raise Exception(
                 f'{mesh_model.cfg.model.type} is not supported yet')
@@ -197,6 +202,8 @@ def single_person_with_mmdet(args, frames_iter):
     pred_cams = np.array(pred_cams)
     verts = np.array(verts)
     bboxes_xyxy = np.array(bboxes_xyxy)
+    print(smpl_poses)
+    print(smpl_poses.shape)
 
     # release GPU memory
     del mesh_model
@@ -591,3 +598,54 @@ if __name__ == '__main__':
         assert args.tracking_config is not None
 
     main(args)
+
+
+"""
+python demo/estimate_smpl.py \
+    configs/hmr/resnet50_hmr_pw3d.py \
+    data/checkpoints/resnet50_hmr_pw3d.pth \
+    --single_person_demo \
+    --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
+    --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --input_path  demo/resources/single_person_demo.mp4 \
+    --show_path vis_results/single_person_demo.mp4 \
+    --output demo_result \
+    --smooth_type savgol \
+    --speed_up_type deciwatch \
+    --draw_bbox
+
+python demo/estimate_smpl.py \
+    configs/hmr/resnet50_hmr_pw3d.py \
+    data/checkpoints/resnet50_hmr_pw3d.pth \
+    --single_person_demo \
+    --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
+    --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --input_path  demo/personal_data/e48dbe8d7d0f4661a6960aa34edc2afb.png \
+    --output demo_result \
+    --smooth_type savgol \
+    --speed_up_type deciwatch \
+    --draw_bbox
+    
+python demo/estimate_smpl.py \
+    configs/hmr/resnet50_hmr_pw3d.py \
+    data/checkpoints/resnet50_hmr_pw3d.pth \
+    --single_person_demo \
+    --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
+    --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --input_path  demo/personal_data/e48dbe8d7d0f4661a6960aa34edc2afb.png \
+    --output demo/personal_data/ \
+    --show_path vis_results/e48dbe8d7d0f4661a6960aa34edc2afb.png
+    
+    
+python demo/estimate_smpl.py \
+    configs/hmr/resnet50_hmr_pw3d.py \
+    data/checkpoints/resnet50_hmr_pw3d.pth \
+    --single_person_demo \
+    --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
+    --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --input_path  demo/personal_data/lixiaolong \
+    --output demo/personal_data/ \
+    --show_path vis_results/7.mp4
+"""
+
+# demo/personal_data/e48dbe8d7d0f4661a6960aa34edc2afb.png

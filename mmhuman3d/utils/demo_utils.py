@@ -612,6 +612,7 @@ def prepare_frames(input_path=None):
     """
     if Path(input_path).is_file():
         img_list = [mmcv.imread(input_path)]
+        print(img_list)
         if img_list[0] is None:
             video = mmcv.VideoReader(input_path)
             assert video.opened, f'Failed to load file {input_path}'
