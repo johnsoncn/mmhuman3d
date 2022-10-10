@@ -8,6 +8,7 @@ import warnings
 from functools import partial
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
+import tqdm
 
 import mmcv
 import numpy as np
@@ -1083,13 +1084,13 @@ def visualize_smpl_calibration(
 
 
 def visualize_smpl_hmr(cam_transl,
+                        mesh_file_path,
                        bbox=None,
                        kp2d=None,
                        focal_length=5000,
                        det_width=224,
                        det_height=224,
                        bbox_format='xyxy',
-                       mesh_file_path=None,
                        **kwargs) -> None:
     """Simplest way to visualize HMR or SPIN or Smplify pred smpl with origin
     frames and predicted cameras."""

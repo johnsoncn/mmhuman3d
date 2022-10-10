@@ -295,7 +295,8 @@ def single_person_with_mmdet(args, frames_iter):
             body_model_config=body_model_config,
             overwrite=True,
             palette=args.palette,
-            read_frames_batch=True)
+            read_frames_batch=True,
+            mesh_file_path=args.mesh_file_path)
         if args.output is None:
             shutil.rmtree(frames_folder)
 
@@ -486,7 +487,8 @@ def multi_person_with_mmtracking(args, frames_iter):
             body_model_config=body_model_config,
             overwrite=True,
             palette=args.palette,
-            read_frames_batch=True)
+            read_frames_batch=True,
+            mesh_file_path=args.mesh_file_path)
 
 
 def main(args):
@@ -551,6 +553,11 @@ if __name__ == '__main__':
         type=str,
         default=None,
         help='directory to save rendered images or video')
+    parser.add_argument(    #Johnson
+        '--mesh_file_path',
+        type=str,
+        default=None,
+        help='directory to save mesh sequence')
     parser.add_argument(
         '--render_choice',
         type=str,
@@ -612,40 +619,86 @@ python demo/estimate_smpl.py \
     --output demo_result \
     --smooth_type savgol \
     --speed_up_type deciwatch \
-    --draw_bbox
-
+    --draw_bbox 
+    
+    
+    
 python demo/estimate_smpl.py \
     configs/hmr/resnet50_hmr_pw3d.py \
     data/checkpoints/resnet50_hmr_pw3d.pth \
     --single_person_demo \
     --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
     --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
-    --input_path  demo/personal_data/e48dbe8d7d0f4661a6960aa34edc2afb.png \
-    --output demo_result \
+    --input_path  demo/resources/dance.mp4 \
+    --show_path vis_results/dance.mp4 \
+    --output demo/personal_data/meizi \
     --smooth_type savgol \
     --speed_up_type deciwatch \
     --draw_bbox
+
+
     
 python demo/estimate_smpl.py \
-    configs/hmr/resnet50_hmr_pw3d.py \
-    data/checkpoints/resnet50_hmr_pw3d.pth \
+    configs/pare/hrnet_w32_conv_pare_coco.py \
+    data/checkpoints/hrnet_w32_conv_pare_coco.pth \
     --single_person_demo \
     --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
     --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
-    --input_path  demo/personal_data/e48dbe8d7d0f4661a6960aa34edc2afb.png \
-    --output demo/personal_data/ \
-    --show_path vis_results/e48dbe8d7d0f4661a6960aa34edc2afb.png
-    
+    --input_path  demo/resources/dance.mp4 \
+    --show_path vis_results/dance.mp4 \
+    --output demo/personal_data/meizi \
+    --smooth_type savgol \
+    --speed_up_type deciwatch \
+    --mesh_file_path demo/meshes/huishou \
+    --draw_bbox 
+
+python demo/estimate_smpl.py \
+    configs/pare/hrnet_w32_conv_pare_coco.py \
+    data/checkpoints/hrnet_w32_conv_pare_coco.pth \
+    --single_person_demo \
+    --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
+    --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --input_path  demo/resources/119250.mp4 \
+    --show_path vis_results/119250.mp4 \
+    --output demo/personal_data/119250 \
+    --smooth_type savgol \
+    --speed_up_type deciwatch \
+    --mesh_file_path demo/meshes/huishou \
+    --draw_bbox 
     
 python demo/estimate_smpl.py \
-    configs/hmr/resnet50_hmr_pw3d.py \
-    data/checkpoints/resnet50_hmr_pw3d.pth \
+    configs/pare/hrnet_w32_conv_pare_coco.py \
+    data/checkpoints/hrnet_w32_conv_pare_coco.pth \
+    --single_person_demo \
+    --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
+    --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --input_path  demo/resources/huishou.mov \
+    --show_path vis_results/huishou.mp4 \
+    --output demo/personal_data/huishou \
+    --smooth_type savgol \
+    --speed_up_type deciwatch \
+    --mesh_file_path demo/meshes/huishou
+    
+python demo/estimate_smpl.py \
+    configs/pare/hrnet_w32_conv_pare_coco.py \
+    data/checkpoints/hrnet_w32_conv_pare_coco.pth \
+    --multi_person_demo \
+    --tracking_config demo/mmtracking_cfg/deepsort_faster-rcnn_fpn_4e_mot17-private-half.py \
+    --input_path  demo/personal_data/ticao \
+    --show_path vis_results/ticao \
+    --smooth_type savgol \
+    --speed_up_type deciwatch \
+    --mesh_file_path demo/meshes/ticao
+    
+python demo/estimate_smpl.py \
+    configs/pare/hrnet_w32_conv_pare_coco.py \
+    data/checkpoints/hrnet_w32_conv_pare_coco.pth \
     --single_person_demo \
     --det_config demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py \
     --det_checkpoint https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
     --input_path  demo/personal_data/lixiaolong \
-    --output demo/personal_data/ \
-    --show_path vis_results/7.mp4
+    --show_path vis_results/lixiaolong \
+    --output demo/personal_data/lixiaolong 
 """
-
+# 'demo/meshes/huishou/'
 # demo/personal_data/e48dbe8d7d0f4661a6960aa34edc2afb.png

@@ -4,7 +4,8 @@ import time
 from collections import deque
 from queue import Queue
 from threading import Event, Lock, Thread
-
+import sys,os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import cv2
 import mmcv
 import numpy as np
